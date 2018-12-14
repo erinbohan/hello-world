@@ -17,11 +17,10 @@ public class ShortLinkRepoTest {
 
 	@Test
 	public void ShortLinkRepoAdd() {
-		String id = "1234";
-
-		shortLinkRepo.add(new ShortLink(id, "testSrcPath"));
+		ShortLink newShortLink = new ShortLink("testSrcPath");
+		shortLinkRepo.add(newShortLink);
 		assertNotNull("ShortLinkRepo should return object just added",
-				      shortLinkRepo.get(id));
+				      shortLinkRepo.get(newShortLink.getId()));
 	}
 
 }
