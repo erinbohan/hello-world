@@ -1,6 +1,6 @@
 package com.frankc.hellomongo.shortlink;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,15 +12,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ShortLinkRepoTest {
 
-	@Autowired
-	private ShortLinkRepo shortLinkRepo;
+    @Autowired
+    private ShortLinkRepo shortLinkRepo;
 
-	@Test
-	public void ShortLinkRepoAdd() {
-		ShortLink newShortLink = new ShortLink("testSrcPath");
-		shortLinkRepo.add(newShortLink);
-		assertNotNull("ShortLinkRepo should return object just added",
-				      shortLinkRepo.get(newShortLink.getId()));
-	}
+    @Test
+    public void testShortLinkRepoAdd() {
+        ShortLink newShortLink = new ShortLink("testSrcPath");
+        shortLinkRepo.save(newShortLink);
+        assertNotNull("ShortLinkRepo should return object just added",
+                      shortLinkRepo.find(newShortLink.getId()));
+    }
 
 }

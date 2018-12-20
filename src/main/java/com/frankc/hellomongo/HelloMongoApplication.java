@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class HelloMongoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HelloMongoApplication.class, args);
-	}
+    public static void main(final String[] args) {
+        SpringApplication.run(HelloMongoApplication.class, args);
+    }
 }
