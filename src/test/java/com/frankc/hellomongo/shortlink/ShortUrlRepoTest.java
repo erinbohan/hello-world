@@ -8,19 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.frankc.hellomongo.entities.ShortUrlJpa;
+import com.frankc.hellomongo.repositories.ShortUrlRepo;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ShortLinkRepoTest {
+public class ShortUrlRepoTest {
 
     @Autowired
-    private ShortLinkRepo shortLinkRepo;
+    private ShortUrlRepo shortLinkRepo;
 
     @Test
     public void testShortLinkRepoAdd() {
-        ShortLink newShortLink = new ShortLink("testSrcPath");
+        ShortUrlJpa newShortLink = new ShortUrlJpa();
+        newShortLink.setRedirectTo("http://www.google.ie");
         shortLinkRepo.save(newShortLink);
         assertNotNull("ShortLinkRepo should return object just added",
-                      shortLinkRepo.find(newShortLink.getId()));
+                      shortLinkRepo.find(newShortLink.getShortUrl()));
     }
-
 }

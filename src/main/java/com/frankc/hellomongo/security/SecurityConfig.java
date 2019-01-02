@@ -1,6 +1,7 @@
 package com.frankc.hellomongo.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,17 +15,20 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.frankc.hellomongo.apikey.ApiKeyRepo;
 import com.frankc.hellomongo.apikey.KeyNotFoundException;
+import com.frankc.hellomongo.controllers.ShortUrlController;
 
 @Configuration
 @EnableWebSecurity
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String DEFAULT_API_KEY_HEADER = "API-KEY";
+
     @Autowired
     private ApiKeyRepo apiKeyRepo;
 
-    // @Value("${yourapp.http.auth-token-header-name}")
-    private String principalRequestHeader = "HELLO-API-KEY";
+    @Value("${api.key.header.name:" + DEFAULT_API_KEY_HEADER + "}")
+    private String principalRequestHeader;
 
     @Override
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
@@ -46,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 return authentication;
             }
         });
-        httpSecurity.antMatcher("/links/**").csrf().disable()
+        httpSecurity.antMatcher(ShortUrlController.BASE_PATH + "**")
+                    .csrf().disable()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and().addFilter(filter).authorizeRequests()
