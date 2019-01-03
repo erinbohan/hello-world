@@ -1,12 +1,19 @@
 package com.frankc.hellomongo.entities;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Document
 public class ShortUrlMongo implements ShortUrl {
 
+    @JsonIgnore
     @Id
     private String id;
 
+    @TextIndexed
     private String shortUrl;
 
     private String redirectTo;
@@ -40,5 +47,11 @@ public class ShortUrlMongo implements ShortUrl {
 
     public void setRedirectTo(final String redirectTo) {
         this.redirectTo = redirectTo;
+    }
+
+    public String toString() {
+        return "Id: " + this.getId()
+               + ", shortUrl: " + this.getShortUrl()
+               + ", redirectTo: " + this.getRedirectTo();
     }
 }

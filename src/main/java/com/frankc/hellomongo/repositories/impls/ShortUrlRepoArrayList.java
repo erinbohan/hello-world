@@ -14,7 +14,7 @@ import com.frankc.hellomongo.shorturl.ShortUrlNotFoundException;
 
 @Repository
 @Profile("default")
-public class InMemShortUrlRepo implements ShortUrlRepo {
+public class ShortUrlRepoArrayList implements ShortUrlRepo {
 
     private final HashMap<String, ShortUrl> shortUrls =
                           new HashMap<String, ShortUrl>();
@@ -40,5 +40,9 @@ public class InMemShortUrlRepo implements ShortUrlRepo {
 
     public List<? extends ShortUrl> findAllShortUrl() {
         return new ArrayList<ShortUrl>(this.shortUrls.values());
+    }
+
+    public void deleteByShortUrlPath(final String shortUrlPath) {
+        return;
     }
 }

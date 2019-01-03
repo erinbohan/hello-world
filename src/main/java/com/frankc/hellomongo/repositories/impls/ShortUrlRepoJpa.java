@@ -13,7 +13,7 @@ import com.frankc.hellomongo.shorturl.ShortUrlNotFoundException;
 
 @Repository
 @Profile("jpa")
-public interface JpaShortUrlRepo
+public interface ShortUrlRepoJpa
                     extends JpaRepository<ShortUrlJpa, String>,
                             ShortUrlRepo {
 
@@ -25,12 +25,21 @@ public interface JpaShortUrlRepo
         return findAll();
     }
 
-    List<ShortUrl> findByShortUrl(String shortUrl);
+    List<ShortUrl> findByShortUrl(String shortUrlPath);
 
     default ShortUrl find(final String shortUrl)
                           throws ShortUrlNotFoundException {
         try {
             return findByShortUrl(shortUrl).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new ShortUrlNotFoundException();
+        }
+    }
+
+    default void deleteByShortUrlPath(final String shortUrlPath)
+                                      throws ShortUrlNotFoundException {
+        try {
+            delete((ShortUrlJpa) findByShortUrl(shortUrlPath).get(0));
         } catch (IndexOutOfBoundsException e) {
             throw new ShortUrlNotFoundException();
         }

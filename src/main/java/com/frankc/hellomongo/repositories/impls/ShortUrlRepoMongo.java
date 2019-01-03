@@ -13,7 +13,7 @@ import com.frankc.hellomongo.shorturl.ShortUrlNotFoundException;
 
 @Repository
 @Profile("mongo")
-public interface MongoShortUrlRepo
+public interface ShortUrlRepoMongo
                     extends MongoRepository<ShortUrlMongo, String>,
                             ShortUrlRepo {
 
@@ -35,4 +35,12 @@ public interface MongoShortUrlRepo
             throw new ShortUrlNotFoundException();
         }
     }
+    default void deleteByShortUrlPath(final String shortUrlPath)
+                                      throws ShortUrlNotFoundException {
+        try {
+            delete((ShortUrlMongo) findByShortUrl(shortUrlPath).get(0));
+        } catch (IndexOutOfBoundsException e) {
+            throw new ShortUrlNotFoundException();
+        }
+}
 }

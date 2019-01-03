@@ -9,9 +9,11 @@ public interface ShortUrlRepo {
 
     ShortUrl newShortUrlEntity();
 
-    ShortUrl save(ShortUrl link);
+    ShortUrl save(ShortUrl shortUrl);
 
-    ShortUrl find(String shortUrl) throws ShortUrlNotFoundException;
+    void deleteByShortUrlPath(String shortUrlPath);
+
+    ShortUrl find(String shortUrlPath) throws ShortUrlNotFoundException;
 
     List<? extends ShortUrl> findAllShortUrl();
 }

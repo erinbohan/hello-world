@@ -13,4 +13,6 @@ public interface ShortUrlService {
     List<? extends ShortUrl> findAll();
 
     ShortUrl findByShortUrl(String shortUrl);
+
+    void deleteByShortUrl(String shortUrl);
 }

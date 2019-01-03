@@ -36,4 +36,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     public ShortUrl findByShortUrl(final String shortUrl) {
         return shortUrlRepo.find(shortUrl);
     }
+
+    public void deleteByShortUrl(final String shortUrlPath) {
+        shortUrlRepo.deleteByShortUrlPath(shortUrlPath);
+        return;
+    }
 }
