@@ -24,7 +24,7 @@ import com.frankc.hellomongo.entities.ApiKey;
 
 
 @Repository
-@Profile("jpa")
+//@Profile("jpa")
 public interface ApiKeyRepoJpa extends JpaRepository<ApiKey, Long> {
 
     ApiKey findByApiKey(String apiKey);
