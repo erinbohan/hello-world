@@ -14,7 +14,7 @@ import com.frankc.hellomongo.shorturl.ShortUrlNotFoundException;
 @Repository
 @Profile("jpa")
 public interface ShortUrlRepoJpa
-                    extends JpaRepository<ShortUrlJpa, String>,
+                    extends JpaRepository<ShortUrlJpa, Long>,
                             ShortUrlRepo {
 
     default ShortUrl newShortUrlEntity() {

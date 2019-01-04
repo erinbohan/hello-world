@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.Authentication;
 
+import com.frankc.hellomongo.controllers.ApiKeyController;
 import com.frankc.hellomongo.controllers.ShortUrlController;
-import com.frankc.hellomongo.security.SecurityConfig;
+import com.frankc.hellomongo.security.ShortUrlSecurityConfig;
 import com.google.common.base.Predicate;
 
 import springfox.documentation.builders.PathSelectors;
@@ -28,12 +30,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
     @Value("${api.key.header.name:"
-           + SecurityConfig.DEFAULT_API_KEY_HEADER + "}")
+           + ShortUrlSecurityConfig.DEFAULT_API_KEY_HEADER + "}")
     private String apiKeyHeader;
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+          .ignoredParameterTypes(Authentication.class)
           .select()
           .apis(RequestHandlerSelectors.any())
           .paths(paths())
@@ -44,7 +47,8 @@ public class SwaggerConfig {
     }
 
     private Predicate<String> paths() {
-        return PathSelectors.ant(ShortUrlController.BASE_PATH + "**");
+        return PathSelectors.regex("^(" + ShortUrlController.BASE_PATH + "|"
+                                   + ApiKeyController.BASE_PATH + ").*$");
     }
 
     private ApiKey apiKey() {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.frankc.hellomongo.entities.ApiKey;
 import com.frankc.hellomongo.entities.ShortUrl;
 import com.frankc.hellomongo.repositories.ShortUrlRepo;
 import com.frankc.hellomongo.shorturl.ShortUrlGenerator;
@@ -18,10 +19,12 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Autowired
     private ShortUrlGenerator shortUrlGenerator;
 
-    public ShortUrl createShortUrl(final String redirectTo) {
+    public ShortUrl createShortUrl(final String redirectTo,
+                                   final ApiKey creatorApiKey) {
         ShortUrl newShortUrl = shortUrlRepo.newShortUrlEntity();
         newShortUrl.setRedirectTo(redirectTo);
         newShortUrl.setShortUrl(shortUrlGenerator.generateBase62());
+        newShortUrl.setCreatorApiKey(creatorApiKey);
         return shortUrlRepo.save(newShortUrl);
     }
 

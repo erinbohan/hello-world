@@ -7,4 +7,7 @@ public interface ShortUrl {
 
     String getRedirectTo();
     void setRedirectTo(String redirectTo);
+
+    void setCreatorApiKey(ApiKey creatorApiKey);
+    String getAccountName();
 }

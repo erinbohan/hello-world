@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,15 +17,18 @@ public class ShortUrlJpa implements ShortUrl {
 
     @JsonIgnore
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(length = UUID2_FIELD_SIZE)
-    private String id;
+    @GeneratedValue
+    private long id;
 
     @Column(unique = true, length = UUID2_FIELD_SIZE)
     private String shortUrl;
 
     private String redirectTo;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "api_key_id", nullable = true)
+    private ApiKey creatorApiKey;
 
     public ShortUrlJpa() { }
 
@@ -38,11 +41,11 @@ public class ShortUrlJpa implements ShortUrl {
         this.setShortUrl(shortUrlDTO.getShortUrl());
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(final String id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -62,9 +65,22 @@ public class ShortUrlJpa implements ShortUrl {
         this.redirectTo = redirectTo;
     }
 
+    public ApiKey getCreatorApiKey() {
+        return creatorApiKey;
+    }
+
+    public void setCreatorApiKey(final ApiKey creatorApiKey) {
+        this.creatorApiKey = creatorApiKey;
+    }
+
+    public String getAccountName() {
+        return this.creatorApiKey.getContactName();
+    }
+
     public String toString() {
         return "Id: " + this.getId()
                + ", shortUrl: " + this.getShortUrl()
                + ", redirectTo: " + this.getRedirectTo();
     }
+
 }

@@ -6,12 +6,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.frankc.hellomongo.entities.ApiKey;
 import com.frankc.hellomongo.entities.ShortUrl;
 import com.frankc.hellomongo.entities.ShortUrlDto;
 import com.frankc.hellomongo.services.ShortUrlService;
@@ -36,7 +39,7 @@ public class ShortUrlController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public static final String BASE_PATH = "/api/";
+    public static final String BASE_PATH = "/short-urls/";
 
     @Autowired
     private ShortUrlService shortUrlService;
@@ -47,7 +50,8 @@ public class ShortUrlController {
      * @return a List of ShortUrls
      */
     @GetMapping
-    public List<? extends ShortUrl> getAllShortUrls() {
+    public List<? extends ShortUrl> getAllShortUrls(
+                                    final HttpServletRequest request) {
         return shortUrlService.findAll();
     }
 
@@ -59,7 +63,8 @@ public class ShortUrlController {
      */
     @GetMapping("{shortUrl}")
     public Resource<ShortUrl> getShortUrl(
-                                @PathVariable("shortUrl") final String shortUrl)
+                                @PathVariable("shortUrl") final String shortUrl,
+                                final HttpServletRequest request)
                                 throws ShortUrlNotFoundException {
         Resource<ShortUrl> resource;
 
@@ -72,7 +77,7 @@ public class ShortUrlController {
         }
         resource.add(linkTo(ShortUrlController.class)
                      .slash(shortUrl).withSelfRel());
-        resource.add(linkTo(methodOn(this.getClass()).getAllShortUrls())
+        resource.add(linkTo(methodOn(this.getClass()).getAllShortUrls(request))
                      .withRel("all-urls"));
 
         return resource;
@@ -86,17 +91,21 @@ public class ShortUrlController {
      */
     @PostMapping
     public Resource<ShortUrl> createShortUrl(
-                                    @RequestBody final ShortUrlDto newShortUrl,
-                                    final HttpServletResponse response) {
+                                   @RequestBody final ShortUrlDto newShortUrl,
+                                   final HttpServletRequest request,
+                                   final HttpServletResponse response,
+                                   final Authentication auth) {
         ShortUrl createdUrl = shortUrlService.createShortUrl(
-                                                newShortUrl.getRedirectTo());
+                                                newShortUrl.getRedirectTo(),
+                                                (ApiKey) auth.getPrincipal());
+
         response.setStatus(HttpServletResponse.SC_CREATED);
 
         Resource<ShortUrl> resource = new Resource<ShortUrl>(createdUrl);
         resource.add(linkTo(ShortUrlController.class)
                      .slash(createdUrl.getShortUrl()).withSelfRel());
         resource.add(linkTo(methodOn(this.getClass())
-                     .getAllShortUrls()).withRel("all-urls"));
+                     .getAllShortUrls(request)).withRel("all-urls"));
 
         return resource;
     }

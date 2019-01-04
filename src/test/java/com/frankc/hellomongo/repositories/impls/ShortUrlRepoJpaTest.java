@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,10 +29,6 @@ public class ShortUrlRepoJpaTest {
     @Autowired
     private ShortUrlRepoJpa shortUrlRepoJpa;
 
-    @Before
-    public void setup() {
-    }
-
     @Test
     public void testShortUrlRepoFindAll() {
         String testRedirectTo = "http://www.google.ie";
@@ -41,6 +36,7 @@ public class ShortUrlRepoJpaTest {
         ShortUrl newShortUrl = shortUrlRepoJpa.newShortUrlEntity();
         newShortUrl.setRedirectTo(testRedirectTo);
         newShortUrl.setShortUrl(testShortUrlPath);
+
         testEntityManager.persist(newShortUrl);
 
         List<? extends ShortUrl> foundShortUrls =

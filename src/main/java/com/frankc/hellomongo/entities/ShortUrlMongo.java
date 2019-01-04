@@ -49,6 +49,14 @@ public class ShortUrlMongo implements ShortUrl {
         this.redirectTo = redirectTo;
     }
 
+    public void setCreatorApiKey(final ApiKey creatorApiKey) {
+        return;
+    }
+
+    public String getAccountName() {
+        return "";
+    }
+
     public String toString() {
         return "Id: " + this.getId()
                + ", shortUrl: " + this.getShortUrl()

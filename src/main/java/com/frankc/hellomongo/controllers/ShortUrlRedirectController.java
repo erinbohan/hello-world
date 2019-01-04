@@ -28,9 +28,9 @@ public class ShortUrlRedirectController {
     private ShortUrlService shortUrlService;
 
     /**
-     * Redirect to the redirectTo of a ShortUrl.
+     * Redirect to the redirectTo field of a ShortUrl.
      *
-     * @param shortUrl of url to by redirected to
+     * @param shortUrl of url to be redirected to
      * @param response object to set status and header
      * @throws ShortUrlNotFoundException
      */
