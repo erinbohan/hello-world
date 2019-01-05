@@ -55,3 +55,11 @@ jobs:
       - store_artifacts:
           path: ~/test-results
 
+      - run:
+          TAG=0.0.$CIRCLE_BUILD_NUM
+          docker build -t callalyf/hello:$TAG -f deploy/Dockerfile .
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push callalyf/hello:$TAG
+          docker tag callalyf/hello:$TAG callalyf/hello:latest
+          docker push callalyf/hello:latest
+
